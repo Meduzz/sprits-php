@@ -8,7 +8,7 @@ Smallish webframework for/by/in php.
 ./template <- this is a template project.
 ```
 
-To enjoy all benefits of this framework, have Apache rewrite all requests for you. (I.e you wont need to do extract your own routes.)
+To enjoy all benefits of this framework, have Apache rewrite all requests for you. (I.e you wont need to extract your own routes.)
 Something like this:
 
 ```
