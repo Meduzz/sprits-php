@@ -1,9 +1,16 @@
 <?php
 class Sprits {
 	private $_mountPoints;
+	public $http404;
+	public $http500;
 
 	public function __construct() {
 		$this->_mountPoints = array();
+		$this->http404 = function() {
+			header('Not Found', true, 404);
+			echo '<h1>404 Not Found</h1>';
+		};
+		// TODO to throw 500, we must catch 500.
 	}
 
 	/**
@@ -30,11 +37,15 @@ class Sprits {
 
 		$holder = Router::findRouteFor($verb, $path);
 
+		if ($holder === false) {
+			call_user_func($this->http404);
+		}
+
 		call_user_func_array($holder->callback, $holder->params);
 	}
 
 	/**
-	 * Convinience method for invoking the go method. I.e do magic.
+	 * Convinience method for invoking the go method. I.e do ze magic.
 	 * @param type $verb an optional verb, in case you'r hacking on your own or testing.
 	 * @param type $path an optional path, in case you'r hacking on your own or testing.
 	 */
@@ -95,6 +106,7 @@ class Router {
 				return $holder;
 			}
 		}
+		return false;
 	}
 
 	/*
