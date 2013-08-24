@@ -1,4 +1,6 @@
 <?php
+// TODO add method to visit other parts of the site, like partial renders (list of news etc)
+// TODO add redirect method, it looks like every serious framework must have one.
 class Sprits {
 	private $_mountPoints;
 	public $http404;
@@ -21,7 +23,12 @@ class Sprits {
 	public function mount($path, $file) {
 		$this->_mountPoints[$path] = $file;
 	}
-	
+
+	/**
+	 * Calling this method will start the magic.
+	 * @param type $verb an optional verb (like GET for get requests)
+	 * @param type $path an optional path (like /spam)
+	 */
 	public function go($verb = null, $path = null) {
 		$verb = $verb == null ? $_SERVER['REQUEST_METHOD'] : $verb;
 		$path = $path == null ? $_SERVER['REQUEST_URI'] : $path;
@@ -39,9 +46,9 @@ class Sprits {
 
 		if ($holder === false) {
 			call_user_func($this->http404);
+		} else {
+			call_user_func_array($holder->callback, $holder->params);
 		}
-
-		call_user_func_array($holder->callback, $holder->params);
 	}
 
 	/**
@@ -83,10 +90,10 @@ class Router {
 	}
 
 	protected static function verb($verb, $path, $action) {
-		$verbs = self::$_routes[$verb];
+		$verbs = array();
 
-		if (!isset($verbs)) {
-			$verbs = array();
+		if (isset(self::$_routes[$verb])) {
+			$verbs = self::$_routes[$verb];
 		}
 
 		$verbs[$path] = $action;
@@ -116,7 +123,7 @@ class Router {
 		$holder = new UrlDTO();
 		$url = '('.$url.')'; // turn it into a working regexp.
 		$matches = array();
-		if (preg_match('(:[a-z0-9]+)', $url, $matches) == 1) {
+		if (preg_match('(:[a-z0-9]+)', $url, $matches) == 1) { // TODO should also take !:; and posibly something more(|)? Not ? though ;)
 			// foreach match, replace :param with a regexp.
 			foreach ($matches as $match) {
 				$holder->params[] = substr($match, 1); // removes the : in :param

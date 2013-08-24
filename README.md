@@ -5,6 +5,7 @@ Smallish webframework for/by/in php.
 ```
 ./framework <- this is where the framework lives.
 ./framework/sprits.php <- this is the webframework file, include it in all your pages to unlock its powers.
+./framework/templating.php <- this is the templating basefile. Include it to take advantage of templating powers.
 ./template <- this is a template project that sidekicks as documentation.
 ```
 
