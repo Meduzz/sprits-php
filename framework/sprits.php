@@ -121,9 +121,9 @@ class Router {
 	 */
 	private static function paramsToRegexp($url) {
 		$holder = new UrlDTO();
-		$url = '('.$url.')'; // turn it into a working regexp.
+		$url = '(^'.str_replace('|', '$|^', $url).'$)'; // turn it into a working regexp.
 		$matches = array();
-		if (preg_match('(:[a-z0-9]+)', $url, $matches) == 1) { // TODO should also take !:; and posibly something more(|)? Not ? though ;)
+		if (preg_match('(:[a-z0-9]+)', $url, $matches) == 1) { // TODO should also take !; and posibly something more(|)? Not ? though ;)
 			// foreach match, replace :param with a regexp.
 			foreach ($matches as $match) {
 				$holder->params[] = substr($match, 1); // removes the : in :param

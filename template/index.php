@@ -8,6 +8,13 @@ Router::GET('/hello/:world', function($world){
 	echo $template->render();
 });
 
+Router::GET('/|/index.php', function() {
+	?>
+	<h1>Don't be evil!</h1>
+	<p>By that I mean, this route should not steal all attention.</p>
+	<?php
+});
+
 $sprits = new Sprits();
 
 // mount the extermely heavy news logic on requests starting with /news
