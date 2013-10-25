@@ -14,6 +14,10 @@ Router::GET('/layout', function(){
 	echo $page->render();
 });
 
+Router::GET('/error', function(){
+	throw new Exception("Error");
+});
+
 Router::GET('/|/index.php', function() {
 	?>
 	<h1>Don't be evil!</h1>

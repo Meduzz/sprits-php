@@ -12,7 +12,10 @@ class Sprits {
 			header('Not Found', true, 404);
 			echo '<h1>404 Not Found</h1>';
 		};
-		// TODO to throw 500, we must catch 500.
+		$this->http500 = function(){
+			header('Internal Server Error.', true, 500);
+			echo '<h1>500 Internal Server Error.</h1>';
+		};
 	}
 
 	/**
@@ -47,7 +50,11 @@ class Sprits {
 		if ($holder === false) {
 			call_user_func($this->http404);
 		} else {
-			call_user_func_array($holder->callback, $holder->params);
+			try {
+				call_user_func_array($holder->callback, $holder->params);
+			} catch (Exception $e) {
+				call_user_func($this->http500);
+			}
 		}
 	}
 
