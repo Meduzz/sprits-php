@@ -8,6 +8,12 @@ Router::GET('/hello/:world', function($world){
 	echo $template->render();
 });
 
+Router::GET('/layout', function(){
+	$page = new Layout(new HTMLTemplate('templates/layout.html'));
+	$page->addPartial('body', new HTMLTemplate('templates/partial.layout.html'));
+	echo $page->render();
+});
+
 Router::GET('/|/index.php', function() {
 	?>
 	<h1>Don't be evil!</h1>

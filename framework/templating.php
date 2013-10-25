@@ -70,6 +70,62 @@ class HTMLTemplate extends Template {
 	}
 }
 
+/**
+ * A form of template wrapper/helper/dsl that lets us add partial templates to a layouty view with ease.
+ */
+class Layout extends Template {
+	public function __construct(Template $layout) {
+		$this->_template = $layout;
+	}
+
+	/**
+	 * Will add value to the layout template model for the key
+	 * @param type $key a key, like %user.name%
+	 * @param type $value a value like "The president."
+	 */
+	public function __invoke($key, $value='') {
+		$this->_template($key, $value);
+	}
+
+	/**
+	 * Acts just as invoke does.
+	 * Adds a value to the layout templates model for the key.
+	 * @param type $key a key.
+	 * @param type $value a value.
+	 */
+	public function put($key, $value = '') {
+		$this->_template->put($key, $value);
+	}
+
+	/**
+	 * Adds a full model to the layout template.
+	 * @param type $model a model (key->value array)
+	 */
+	public function putAll($model) {
+		$this->_template->putAll($model);
+	}
+
+	/**
+	 * Tells the layout template to render itself with the model currently set.
+	 * @return type returns the output from the rendering of the template.
+	 */
+	public function render() {
+		return $this->_template->render();
+	}
+
+	/**
+	 * Adds a partial template to the layout template for key.
+	 * The partial template will be asked to render itself, and the output will then be put at the key in the layout templates model.
+	 * @param type $key a key, like %menu%.
+	 * @param Template $template a partial template.
+	 * @return \Layout returns $this for chaining.
+	 */
+	public function addPartial($key, Template $template) {
+		$this->_template->put($key, $template->render());
+		return $this;
+	}
+}
+
 class VievHelper {
 	private static $_helpers = array();
 
