@@ -18,6 +18,10 @@ Router::GET('/error', function(){
 	throw new Exception("Error");
 });
 
+Router::GET('/another/error', function(){
+	strpos();
+});
+
 Router::GET('/|/index.php', function() {
 	?>
 	<h1>Don't be evil!</h1>
@@ -26,6 +30,8 @@ Router::GET('/|/index.php', function() {
 });
 
 $sprits = new Sprits();
+
+set_error_handler(array($sprits, 'error_handler')); // tells php we brought our own error-handler.
 
 // mount the extermely heavy news logic on requests starting with /news
 $sprits->mount('/news', 'news.php');

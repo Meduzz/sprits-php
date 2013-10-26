@@ -12,6 +12,7 @@ class Sprits {
 			header('Not Found', true, 404);
 			echo '<h1>404 Not Found</h1>';
 		};
+		// TODO add params to the 500 callback, so the exception can be sent to the page.
 		$this->http500 = function(){
 			header('Internal Server Error.', true, 500);
 			echo '<h1>500 Internal Server Error.</h1>';
@@ -69,11 +70,22 @@ class Sprits {
 		
 		$this->go($verb, $path);
 	}
+
+	/**
+	 * Error handler that throws a proper exception.
+	 * @param type $errorno
+	 * @param type $errorstr
+	 * @param type $errorfile
+	 * @param type $errorline
+	 * @throws ErrorException <- it's true, always.
+	 */
+	public function error_handler($errorno, $errorstr, $errorfile, $errorline) {
+		throw new ErrorException($errorstr, $errorno, 1, $errorfile, $errorline);
+		return true;
+	}
 }
 
 class Router {
-	// TODO possibly add a comparator/sorter that puts the longest keys first (for a more exhaustive search)
-	// could kill any prio made by user though.
 	private static $_routes = array();
 	
 	public static function GET($path, $action) {
