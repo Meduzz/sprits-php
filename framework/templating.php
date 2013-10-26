@@ -9,7 +9,9 @@ abstract class Template {
 
 	public function putAll($model) {
 		foreach ($model as $key => $value) {
+			if (!$value instanceof Template) {
 				$this->_model[$key] = $value;
+			}
 		}
 	}
 
@@ -37,6 +39,10 @@ class PHPTemplate extends Template {
 
 	public function render() {
 		foreach ($this->_model as $key => $value) {
+			if ($value instanceof Template) {
+				$value->putAll($this->_model);
+				$value = $value->render();
+			}
 			${$key} = $value;
 		}
 
@@ -58,11 +64,14 @@ class HTMLTemplate extends Template {
 		$this->_template = $htmlFile;
 	}
 
-	// TODO learn to handle objects. Use a helper as a workaround for now.
 	public function render() {
 		$template = file_get_contents($this->_template);
 
 		foreach ($this->_model as $key => $value) {
+			if ($value instanceof Template) {
+				$value->putAll($this->_model);
+				$value = $value->render();
+			}
 			$template = str_replace('%'.$key.'%', VievHelper::helpRender($key, $value), $template);
 		}
 
@@ -84,7 +93,7 @@ class Layout extends Template {
 	 * @param type $value a value like "The president."
 	 */
 	public function __invoke($key, $value='') {
-		$this->_template($key, $value);
+		$this->_template->put($key, $value);
 	}
 
 	/**
@@ -121,7 +130,7 @@ class Layout extends Template {
 	 * @return \Layout returns $this for chaining.
 	 */
 	public function addPartial($key, Template $template) {
-		$this->_template->put($key, $template->render());
+		$this->_template->put($key, $template);
 		return $this;
 	}
 }

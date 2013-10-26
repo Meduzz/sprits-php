@@ -142,9 +142,9 @@ class Router {
 		$holder = new UrlDTO();
 		$url = '(^'.str_replace('|', '$|^', $url).'$)'; // turn it into a working regexp.
 		$matches = array();
-		if (preg_match('(:[a-z0-9]+)', $url, $matches) == 1) { // TODO should also take !; and posibly something more(|)? Not ? though ;)
+		if (preg_match_all('(:[a-z0-9]+)', $url, $matches) > 0) { // TODO should also take !; and posibly something more(|)? Not ? though ;)
 			// foreach match, replace :param with a regexp.
-			foreach ($matches as $match) {
+			foreach ($matches[0] as $match) {
 				$holder->params[] = substr($match, 1); // removes the : in :param
 				$url = str_replace($match, '([a-zA-Z0-1]+)', $url);
 			}
@@ -159,15 +159,15 @@ class Router {
 	 */
 	private static function holderMatchesPath($holder, $path) {
 		$matches = array();
-		if (preg_match($holder->path, $path, $matches) == 1) {
+		if (preg_match_all($holder->path, $path, $matches) > 0) {
 			if (count($matches) == 1) {
 				return $holder;
 			} else if (count($matches) > 1) {
 				$keys = $holder->params;
 				$params = array();
 				$i = 0;
-				while ($i < count($matches)) {
-					$params[$keys[$i]] = $matches[$i+1];
+				while ($i < count($keys)) {
+					$params[$keys[$i]] = $matches[$i+1][0];
 					$i++;
 				}
 
