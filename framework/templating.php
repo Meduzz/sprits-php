@@ -72,7 +72,7 @@ class HTMLTemplate extends Template {
 				$value->putAll($this->_model);
 				$value = $value->render();
 			}
-			$template = str_replace('%'.$key.'%', VievHelper::helpRender($key, $value), $template);
+			$template = str_replace('%'.$key.'%', ViewHelper::helpRender($key, $value), $template);
 		}
 
 		return $template;
@@ -135,7 +135,7 @@ class Layout extends Template {
 	}
 }
 
-class VievHelper {
+class ViewHelper {
 	private static $_helpers = array();
 
 	public static function helpRender($key, $data) {

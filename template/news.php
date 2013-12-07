@@ -19,7 +19,7 @@ class ListNewsHelper implements Helper {
 }
 
 // Register our helper with the tag it should handle.
-VievHelper::registerHelper('body', new ListNewsHelper());
+ViewHelper::registerHelper('body', new ListNewsHelper());
 
 Router::GET('/news', function(){
 	$newsModel = array('body' => array('Great news.', 'Good news.', 'Some news.', 'Bad news.', 'No news.'));
@@ -27,7 +27,7 @@ Router::GET('/news', function(){
 	if (isset($_GET['embed'])) {
 		// skip layout
 		// not recomended, but possible. Imagine a XHR scenario here.
-		echo VievHelper::helpRender('body', $newsModel['body']);
+		echo ViewHelper::helpRender('body', $newsModel['body']);
 	} else {
 		// render with layout.
 		$layout = new HTMLTemplate('templates/layout.html');
