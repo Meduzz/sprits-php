@@ -140,7 +140,7 @@ class ViewHelper {
 
 	public static function helpRender($key, $data) {
 		if (!isset(self::$_helpers[$key])) {
-			return $data;
+			return is_array($data) ? '' : $data;
 		}
 
 		$helpers = self::$_helpers[$key];
