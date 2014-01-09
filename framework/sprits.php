@@ -146,7 +146,7 @@ class Router {
 			// foreach match, replace :param with a regexp.
 			foreach ($matches[0] as $match) {
 				$holder->params[] = substr($match, 1); // removes the : in :param
-				$url = str_replace($match, '([a-zA-Z0-1]+)', $url);
+				$url = str_replace($match, '([a-zA-Z0-9]+)', $url);
 			}
 		}
 
